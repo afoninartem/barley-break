@@ -23,35 +23,38 @@ const generatePlayingField = () => {
 // const tab = generatePlayingField();
 // div.append(tab);
 // the same in 1 line:
-document.querySelector('.gem-puzzle').append(generatePlayingField());
-const field = document.querySelector('.table-bordered');
-field.onclick = function(e) {
-    let target = e.target;
-    // console.log(target.cellIndex);
-    // console.log(target.parentElement.previousElementSibling.children);
-    let prevSib = target.parentElement.previousElementSibling.children;
-    prevSib = [...prevSib];
-    console.log(element.cellIndex);
-    prevSib.forEach(element => {
-        if (element.classList.contains('table-active') && element.cellIndex === targetValue.cellIndex) {
-            const empty = document.querySelector('.table-active');
-            empty.innerHTML = targetValue;
-            empty.classList.toggle('table-active');
-            target.classList.add('table-active');
-            target.innerHTML = '';
-        }
-    });
-    const targetValue = target.innerHTML;
-    const targetCell = target.cellIndex;
-    const targetRow = target.rowIndex;  
-    // console.log(target.nextElementSibling.classList);
-    if (target.nextElementSibling.classList.contains('table-active') ||
-        target.previousElementSibling.classList.contains('table-active')) { //дописать сюда условия для верх/низ
-        const empty = document.querySelector('.table-active');
-        empty.innerHTML = targetValue;
-        empty.classList.toggle('table-active');
-        target.classList.add('table-active');
-        target.innerHTML = '';
-    } 
 
+document.querySelector('.gem-puzzle').append(generatePlayingField()); //отрисовка таблицы и размещение её в нужном диве
+
+const field = document.querySelector('.table-bordered');
+
+
+
+field.onclick = function(e) {
+  let target = e.target;
+  let targetX = target.cellIndex;
+  let targetY = target.parentElement.rowIndex;
+  let empty = document.querySelector('.table-active');
+  let emptyX = empty.cellIndex;
+  let emptyY = empty.parentElement.rowIndex;
+  const mutate = () => {
+    empty.innerHTML = target.innerHTML;
+    empty.classList.remove('table-active');
+    target.innerHTML = '';
+    target.classList.add('table-active');
+  }
+  if (targetY === emptyY) {
+    if (targetX - emptyX === -1) {
+      mutate();
+    } else if (targetX - emptyX === 1) {
+      mutate();
+    }
+  }
+  if (targetX === emptyX) {
+    if (targetY - emptyY === -1) {
+      mutate();
+    } else if (targetY - emptyY === 1) {
+      mutate();
+    }
+  }
 }
